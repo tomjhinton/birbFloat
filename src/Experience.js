@@ -88,4 +88,4 @@ export default function Experience(props) {
   );
 }
 
-useGLTF.preload("/float2.glb");
+useGLTF.preload("float2.glb");
