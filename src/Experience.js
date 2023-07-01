@@ -15,7 +15,7 @@ export default function Experience(props) {
     const cheeses = useTexture('cheeses1.png');
   const cheeses2 = useTexture('cheeses2.png');
   const cheeses3 = useTexture('cheeses4.png');
-    const { nodes, materials } = useGLTF("/float2.glb");
+    const { nodes, materials } = useGLTF("float2.glb");
 
 
     useEffect(() => {
