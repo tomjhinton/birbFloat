@@ -1,21 +1,30 @@
 import React, { useRef, useEffect } from "react";
 import { useGLTF , useTexture} from "@react-three/drei";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, QuadraticBezierLine } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from 'three'
 import Title from "./Title/Title.js"
+import Fish from  "./Fish/Fish.js"
 import { TrunkMaterial, WaterMaterial } from "./materials/materials";
 
+function Cable({ start, end, v1 = new THREE.Vector3(), v2 = new THREE.Vector3() }) {
+    const ref = useRef()
+    useFrame(() => ref.current.setPoints(start.current.getWorldPosition(v1), [-10,4]), [])
+    return <QuadraticBezierLine ref={ref} lineWidth={3} color="#ff2060" />
+  }
+  
 
 export default function Experience(props) {
 
     const trunkMaterial = useRef()
     const waterMaterial = useRef()
+    const titleRef = useRef()
+    const groupRef = useRef()
 
     const cheeses = useTexture('cheeses1.png');
   const cheeses2 = useTexture('cheeses2.png');
   const cheeses3 = useTexture('cheeses4.png');
-    const { nodes, materials } = useGLTF("float2.glb");
+const { nodes, materials } = useGLTF("float2.glb");
 
 
     useEffect(() => {
@@ -31,7 +40,7 @@ export default function Experience(props) {
             // Update the time uniform
             trunkMaterial.current.uniforms.uTime.value += 0.01;
             waterMaterial.current.uniforms.uTime.value += 0.01;
-          
+        //   console.log(titleRef)
             // bodyMaterial.current.uniforms.uTime.value += 0.01;
             // legMaterial.current.uniforms.uTime.value += 0.01;
         
@@ -40,9 +49,11 @@ export default function Experience(props) {
   return (
     <>
     <OrbitControls makeDefault enableZoom={true} maxPolarAngle={Math.PI * .5}/>
-    <Title />
+    <Title ref={titleRef}/>
+    <Cable start={groupRef} end={titleRef} />
+    <Fish />
 
-    <mesh rotation-x={Math.PI * 1.5}>
+    <mesh rotation-x={Math.PI * 1.5} >
             <planeBufferGeometry attach="geometry" args={[25, 25, 150, 150]}  />
             <waterMaterial side={THREE.DoubleSide} ref={waterMaterial} />
          </mesh>
@@ -62,6 +73,7 @@ export default function Experience(props) {
         receiveShadow
         geometry={nodes.Vert001.geometry}
         material={materials["Material.001"]}
+        ref={groupRef}
       />
       <mesh
         castShadow
@@ -76,6 +88,7 @@ export default function Experience(props) {
         receiveShadow
         geometry={nodes.Vert001_2.geometry}
         material={materials["Default OBJ"]}
+        
       />
       <mesh
         castShadow
@@ -84,6 +97,8 @@ export default function Experience(props) {
         material={materials["Material.002"]}
       />
     </group>
+   
+
     </>
   );
 }

@@ -14,7 +14,7 @@ import fragmentShader from './shaders/fragment.js'
 
 
 
-export default function Title(){
+export default function Title(props){
 
     const TitleMaterial = shaderMaterial(
         {
